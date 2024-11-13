@@ -1,3 +1,4 @@
+import math
 class Warehouse:
     """
     The warehouse class represents the main and auxiliary storage space, along with the per quarter depreciation and costs.
@@ -10,8 +11,8 @@ class Warehouse:
         self.costs = costs
 
     def deprecate(self):
-        self.main = self.main - (self.main * self.depreciation)
-        self.auxiliary  = self.auxiliary - (self.auxiliary * self.depreciation)
+        self.main = math.ceil(self.main - (self.main * self.depreciation))
+        self.auxiliary  = math.ceil(self.auxiliary - (self.auxiliary * self.depreciation))
 
     def warehouse_cost(self):
         return (self.main + self.auxiliary) * self.costs
