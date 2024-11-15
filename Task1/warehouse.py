@@ -10,6 +10,9 @@ class Warehouse:
         self.depreciation = depreciation
         self.costs = costs
 
+    def max_capacity(self):
+        return self.main + self.auxiliary
+
     def deprecate(self):
         self.main = math.ceil(self.main - (self.main * self.depreciation))
         self.auxiliary  = math.ceil(self.auxiliary - (self.auxiliary * self.depreciation))
