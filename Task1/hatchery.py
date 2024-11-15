@@ -71,7 +71,19 @@ class Hatchery:
             else:
                 return f"Invalid fish type"
         
-        
+        def use_supplies(self, fertilizer, feed, salt):
+            supplies = [fertilizer, feed, salt]
+            for i, supply in enumerate(supplies):
+                total_available = self.warehouse[i].main + self.warehouse[i].auxiliary
+                if supply > total_available:
+                    raise ValueError(f"Not enough {self.warehouse[i].supply} available")
+                else:
+                    self.warehouse[i].main -= min(supply, self.warehouse[i].main)
+
+                if supply > self.warehouse[i].main:
+                    self.warehouse[i].auxiliary -= supply - self.warehouse[i].main
+                
+
 
         def __str__(self):
             return f"{self.cash}\n{self.fish_types}\n{self.warehouse}\n{self.suppliers}"
