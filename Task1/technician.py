@@ -10,3 +10,9 @@ class Technician:
 
     def pay_perquarter(self):
         return self.ratepw * 12  # total pay of the technician per quarter 
+
+    def maintain_fish(self, fish_type, quantity):
+        maintenance_time = quantity * fish_type.time
+        if self.specialty == fish_type.name:
+            maintenance_time *= 2/3
+        return maintenance_time

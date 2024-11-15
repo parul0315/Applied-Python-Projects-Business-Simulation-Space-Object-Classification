@@ -19,10 +19,3 @@ class Warehouse:
         
     def __str__(self):
         return f"{self.supply} \n{self.main} \n{self.auxiliary}"
-
-
-# warehouse = [
-#     ("fertilizers", 20, 10, 0.4, 0.1),
-#     ("feed", 400, 200, 0.1, 1),
-#     ("salt", 200, 100, 0.1, 1)
-# ]
