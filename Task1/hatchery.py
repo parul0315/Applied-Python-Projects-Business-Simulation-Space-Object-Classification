@@ -8,6 +8,9 @@ class Hatchery:
     Hatchery class contains attributes and associated functions about the supplies, cash status, and number of technicians.
     """
     def __init__(self, cash = 10000):
+        """
+        Initializing the cash balance of £10,000 at the beginning.
+        """
         self.cash = cash
         self.technicians = []
         self.fish_types = {
@@ -82,6 +85,20 @@ class Hatchery:
 
                 if supply > self.warehouse[i].main:
                     self.warehouse[i].auxiliary -= supply - self.warehouse[i].main
+
+        def pay_expenses(self):
+            fixed_cost = 1500
+            technician_cost = sum(tech.pay_perquarter() for tech in self.technicians)
+            warehouse_cost = sum(w.warehouse_cost() for w in warehouse_cost)
+            total_cost = fixed_cost + technician_cost + warehouse_cost
+
+            if self.cash >= total_cost:
+                self.cash -= total_cost
+                return f"(paid {total_cost} pounds in expenses)"
+            else:
+                return f"(not enough cash to pay expenses)"
+            
+
                 
 
 
