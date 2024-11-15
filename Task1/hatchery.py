@@ -86,6 +86,11 @@ class Hatchery:
                 if supply > self.warehouse[i].main:
                     self.warehouse[i].auxiliary -= supply - self.warehouse[i].main
 
+        def apply_depreciation(self):
+            for w in self.warehouse:
+                w.deprecate()
+            return "applied depreciation to the main and auxiliary warehouses"
+        
         def pay_expenses(self):
             fixed_cost = 1500
             technician_cost = sum(tech.pay_perquarter() for tech in self.technicians)
@@ -97,10 +102,24 @@ class Hatchery:
                 return f"(paid {total_cost} pounds in expenses)"
             else:
                 return f"(not enough cash to pay expenses)"
+        
+        def restock(self, supplier_name):
+            # initialize supplier variable
             
 
+            # find the supplier using the supplier name
+            for s in self.suppliers:
+                if s.name == supplier_name:
+                    return s
+            print("No matching supplier is found")
+            return None
                 
+            # initialize the cost of restocking
+            restock_cost = 0
 
+            # calculate the amount of each stock to be refilled.
+
+        
 
         def __str__(self):
             return f"{self.cash}\n{self.fish_types}\n{self.warehouse}\n{self.suppliers}"
