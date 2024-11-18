@@ -9,8 +9,9 @@ class Warehouse:
         self.auxiliary = auxiliary
         self.depreciation = depreciation
         self.costs = costs
+        # A: add variables for main_max_capacity and aux_max_capacity
 
-    def max_capacity(self):
+    def max_capacity(self): # P: if we are not using this anywhere else can delete or update accordingly
         return self.main + self.auxiliary
 
     def deprecate(self):

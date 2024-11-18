@@ -22,7 +22,7 @@ class Hatchery:
             "Modal Bass": Fish("Modal Bass", 300.0, 12, 6, 3.0, 50, 500)
         }
         self.warehouse = [
-            Warehouse("fertilizers", 20, 10, 0.4, 0.1),
+            Warehouse("fertilizer", 20, 10, 0.4, 0.1),
             Warehouse("feed", 400, 200, 0.1, 1),
             Warehouse("salt", 200, 100, 0.1, 1)
         ]
@@ -67,9 +67,9 @@ class Hatchery:
                         self.use_supplies(total_fertilizer, total_feed, total_salt)
                         return f"Sold {quantity} {fish_type} for {fish.price * quantity} pounds"
                     else:
-                        return f"do not have enough labour to maintain the amount of fish required"
+                        return f"do not have enough labour to maintain the amount of fish required" # P: put in the required labour variable and total labour here
                 else:
-                    return f"do not have enough supplies for the amount of fish required"
+                    return f"do not have enough supplies for the amount of fish required" # P: similarly put in the warehouse quantity required and total here
                     
             else:
                 return f"Invalid fish type"
@@ -80,11 +80,11 @@ class Hatchery:
                 total_available = self.warehouse[i].main + self.warehouse[i].auxiliary
                 if supply > total_available:
                     raise ValueError(f"Not enough {self.warehouse[i].supply} available")
-                else:
-                    self.warehouse[i].main -= min(supply, self.warehouse[i].main)
-
-                if supply > self.warehouse[i].main:
+                elif supply > self.warehouse[i].main:
                     self.warehouse[i].auxiliary -= supply - self.warehouse[i].main
+                    self.warehouse[i].main = 0
+                else:
+                    self.warehouse[i].main -= supply
 
         def apply_depreciation(self):
             for w in self.warehouse:
@@ -99,27 +99,54 @@ class Hatchery:
 
             if self.cash >= total_cost:
                 self.cash -= total_cost
-                return f"(paid {total_cost} pounds in expenses)"
+                return f"(paid {total_cost} pounds in expenses)" # P: add remaining cash to output as well
             else:
-                return f"(not enough cash to pay expenses)"
+                return f"(not enough cash to pay expenses)" # P: add required cash and cuurent cash here as well
         
         def restock(self, supplier_name):
             # initialize supplier variable
-            
-
+            supplier = None
             # find the supplier using the supplier name
             for s in self.suppliers:
                 if s.name == supplier_name:
-                    return s
-            print("No matching supplier is found")
-            return None
+                    supplier = s
+                break
+            if supplier is None:
+                print("No matching supplier is found")
+                return None
                 
             # initialize the cost of restocking
             restock_cost = 0
 
-            # calculate the amount of each stock to be refilled.
+            # calculate the amount of each stock to be refilled and the cost for them.
+            for w in self.warehouse:
+                main_need = max(0, w.max_capacity - w.main) # P: the max capacity function here returns the capacity of main + aux so we cant use that here, better to add variable in the warehouse class to hold the max capacity for that warehouse
+                aux_need = max(0, w.max_capacity - w.auxiliary) # P: ditto as above
+                if w.supply == "fertilizer":
+                    cost = (main_need + aux_need) * supplier.fertilizer_rate
+                elif w.supply == "feed":
+                    cost = (main_need + aux_need) * supplier.feed_rate
+                elif w.supply == "salt":
+                    cost = (main_need + aux_need) * supplier.salt_rate
+                else:
+                    cost = 0
+                
+                restock_cost += cost
 
+                # update warehouse stock levels after restocking
+                if main_need > 0:
+                    w.main += main_need
+                if aux_need > 0:
+                    w.auxiliary += aux_need
+            
+            if self.cash >= restock_cost:
+                self.cash -= restock_cost
+                return f"supplies are restocked from {supplier.name} for £{total_cost}"
+            else:
+                return f"Not enough cash to restock supplies" # A: add required and total cash
+            
         
+
 
         def __str__(self):
             return f"{self.cash}\n{self.fish_types}\n{self.warehouse}\n{self.suppliers}"
