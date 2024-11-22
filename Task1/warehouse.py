@@ -13,9 +13,6 @@ class Warehouse:
         self.main_max_capacity = main
         self.aux_max_capacity = auxiliary
 
-    def max_capacity(self): # P: if we are not using this anywhere else can delete or update accordingly
-        return self.main + self.auxiliary
-
     def deprecate(self):
         self.main = math.ceil(self.main - (self.main * self.depreciation))
         self.auxiliary  = math.ceil(self.auxiliary - (self.auxiliary * self.depreciation))

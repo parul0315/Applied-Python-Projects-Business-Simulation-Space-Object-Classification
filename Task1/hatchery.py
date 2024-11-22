@@ -21,6 +21,10 @@ class Hatchery:
             "Fugue Flounder": Fish("Fugue Flounder", 0.2, 12, 2, 2.5, 30, 550),
             "Modal Bass": Fish("Modal Bass", 0.3, 12, 6, 3.0, 50, 500)
         }
+
+        """
+        Initializing the warehouse and the supplier values.
+        """
         self.warehouse = [
             Warehouse("fertilizer", 20, 10, 0.4, 0.1),
             Warehouse("feed", 400, 200, 0.1, 1),
@@ -77,9 +81,9 @@ class Hatchery:
                         self.use_supplies(total_fertilizer, total_feed, total_salt)
                         return f"Sold {actual_quantity} {fish_type} for {fish.price * actual_quantity} pounds"
                     else:
-                        return f"\nInsufficient labour: required {required_labour} weeks, available {total_time}" # P: put in the required labour variable and total labour here
+                        return f"\nInsufficient labour: required {required_labour} weeks, available {total_time}"
                 else:
-                    return f"\nInsufficient ingredients: \nfertiliser need {total_fertilizer} storage {total_fertilizer_available} \nfeed need {total_feed} storage {total_feed_available} \nsalt need {total_salt} storage {total_salt_available}" # P: similarly put in the warehouse quantity required and total here
+                    return f"\nInsufficient ingredients: \nfertiliser need {total_fertilizer} storage {total_fertilizer_available} \nfeed need {total_feed} storage {total_feed_available} \nsalt need {total_salt} storage {total_salt_available}"
                     
             else:
                 return f"Invalid fish type"
