@@ -3,7 +3,7 @@ class Warehouse:
     """
     The warehouse class represents the main and auxiliary storage space, along with the per quarter depreciation and costs.
     """
-    def __init__(self,  supply, main, auxiliary, depreciation, costs):
+    def __init__(self, supply, main, auxiliary, depreciation, costs):
         self.supply = supply
         self.main = main
         self.auxiliary = auxiliary
