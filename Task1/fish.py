@@ -7,7 +7,7 @@ class Fish:
         self.fertilizer = fertilizer
         self.feed = feed
         self.salt = salt
-        self.time = time
+        self.time = time / 5
         self.price = price
         self.demand = demand
 

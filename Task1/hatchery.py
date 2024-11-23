@@ -13,6 +13,7 @@ class Hatchery:
         """
         self.cash = cash
         self.technicians = []
+        self.max_technicians = 5
         self.fish_types = {
             "Clef Fins": Fish("Clef Fins", 0.1, 12, 2, 2.0, 25, 250),
             "Timpani Snapper": Fish("Timpani Snapper", 0.05, 9, 2, 1.0, 10, 350),
@@ -37,54 +38,92 @@ class Hatchery:
         self.bankrupt = False
 
     def add_technician(self, name, quarter, specialty=None):
-            if len(self.technicians) < 5:
+                 
+            if len(self.technicians) < self.max_technicians:
                 new_technician = Technician(name, specialty=specialty)
                 self.technicians.append(new_technician)
                 print(f"Hired {self.technicians[-1].name}, weekly rate = 500, for quarter {quarter}")
                 return True
             else:
                 return "We already have the max amount of Technicians"
+                 
 
     def remove_technician(self):
-            if len(self.technicians) < 0:
-                print(f"Let go of {self.technician[-1].name}")
+            if len(self.technicians) > 0:
+                print(f"Let go of {self.technicians[-1].name}")
                 self.technicians.pop()
             else:
                 return "No technicians available to let go"
+            
+    def calculate_labour(self):
+         # Calculate totale labour available
+        total_time = len(self.technicians) * 9
+        return total_time
+    
+    def calculate_required_labour(self, fish, actual_quantity):
+        if fish in self.fish_types:
+            fish = self.fish_types[fish]
+            return (fish.time * actual_quantity)
+    
+    def check_supplies(self, total_fertilizer_available, total_fertilizer, total_feed_available, total_feed, total_salt_available, total_salt):
+        if (total_fertilizer_available >= total_fertilizer and 
+            total_feed_available >= total_feed and 
+            total_salt_available >= total_salt):
+            return True
+        else:
+            return False
+         
+         
+    def check_labour(self, total_time, required_labour):
+        if (total_time >= required_labour):
+            return True
+        else:
+            return False
         
-    def sell_fish(self, fish_type, quantity):
+    def sell_fish(self, fish_type, quantity, time_left):
             if fish_type in self.fish_types:
                 fish = self.fish_types[fish_type]
             
+                # Calculate total available warehouse supplies
+                total_fertilizer_available = self.warehouse[0].main + self.warehouse[0].auxiliary
+                total_feed_available = self.warehouse[1].main + self.warehouse[1].auxiliary
+                total_salt_available = self.warehouse[2].main + self.warehouse[2].auxiliary
+
                 # Limit the quantity to the demand if it exceeds
                 actual_quantity = min(quantity, fish.demand)
                 total_fertilizer = fish.fertilizer * actual_quantity
                 total_feed = fish.feed * actual_quantity
                 total_salt = fish.salt * actual_quantity
 
-                total_fertilizer_available = self.warehouse[0].main + self.warehouse[0].auxiliary
-                total_feed_available = self.warehouse[1].main + self.warehouse[1].auxiliary
-                total_salt_available = self.warehouse[2].main + self.warehouse[2].auxiliary
+                #check if we have enough labour
+                required_labour = fish.time * actual_quantity
+                print(f"Total labor available: {time_left} weeks")
+                print(f"Labor required: {required_labour} weeks")
+                
+                supplies_checker = self.check_supplies(
+                     total_fertilizer_available,
+                     total_fertilizer,
+                     total_feed_available,
+                     total_feed,
+                     total_salt_available,
+                     total_salt
+                )
+                labour_checker = self.check_labour(time_left, required_labour)
 
-                if (total_fertilizer_available >= total_fertilizer and
-                    total_feed_available >= total_feed and 
-                    total_salt_available >= total_salt):
-
-                    #check if we have enough labour
-                    total_time = len(self.technicians) * 9 * 7
-                    required_labour = fish.time * actual_quantity
-                    print(f"Total labor available: {total_time} hours")
-                    print(f"Labor required: {required_labour} hours")
-
-                    if total_time >= required_labour:
-                        self.cash += fish.price * actual_quantity
-                        self.use_supplies(total_fertilizer, total_feed, total_salt)
-                        return f"Sold {actual_quantity} {fish_type} for {fish.price * actual_quantity} pounds"
-                    else:
-                        return f"\nInsufficient labour: required {required_labour} weeks, available {total_time}"
+                if  supplies_checker and labour_checker:
+                    self.cash += fish.price * actual_quantity
+                    self.use_supplies(total_fertilizer, total_feed, total_salt)
+                    return f"Sold {actual_quantity} {fish_type} for {fish.price * actual_quantity} pounds"
                 else:
-                    return f"\nInsufficient ingredients: \nfertiliser need {total_fertilizer} storage {total_fertilizer_available} \nfeed need {total_feed} storage {total_feed_available} \nsalt need {total_salt} storage {total_salt_available}"
-                    
+                    if labour_checker and not supplies_checker:
+                        return f"\n\nInsufficient ingredients: \
+                        \nfertiliser need {total_fertilizer} storage {total_fertilizer_available} \
+                        \nfeed need {total_feed} storage {total_feed_available} \
+                        \nsalt need {total_salt} storage {total_salt_available}"
+                    elif supplies_checker and not labour_checker:
+                        return f"\n\nInsufficient labour: required {required_labour} weeks, available {time_left} weeks"
+                    else: 
+                        return f"\n\nInsufficient ingredients: \nfertiliser need {total_fertilizer} storage {total_fertilizer_available} \nfeed need {total_feed} storage {total_feed_available} \nsalt need {total_salt} storage {total_salt_available}\nInsufficient labour: required {required_labour} weeks, available {time_left}"
             else:
                 return f"Invalid fish type"
         
@@ -124,7 +163,7 @@ class Hatchery:
             for s in self.suppliers:
                 if s.name == supplier_name:
                     supplier = s
-                break
+                    break
             if supplier is None:
                 print("No matching supplier is found")
                 return None

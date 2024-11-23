@@ -1,15 +1,16 @@
 from hatchery import Hatchery
 
 def main():
-    # initializing the hatchery 
-    hatchery = Hatchery()
-    
     """
     The number of quarters is taken as an input from the user. The input takes an int value, and prompts the user
     to enter an int value and gives an error when the user gives an negative value or an invalid data type value.
     Param: str (prompt)
     return: int
     """
+
+    # initializing the hatchery 
+    hatchery = Hatchery()
+    
     while True:
         try:
             quarter = int(input(">>> Enter the number of quarters for the simulation: "))
@@ -24,7 +25,7 @@ def main():
     """
 
     for q in range(1, quarter + 1):
-        print("================================")
+        print("\n================================")
         print(f"====== SIMULATING quarter {q} ======")
         print("================================")
 
@@ -45,43 +46,49 @@ def main():
         The if statement here checks for the number of technician used and the for loop calls the methods 'add_technician' 
         and 'remove_technician' from the class Hatchery.
         Params for 'add_technician': name (str), quarter (int)
-        Return
-
         """
         if no_technician > 0:
-            for _ in range(no_technician):
+            for i in range(no_technician):
                 name = input(">>> Enter technician name: ")
-                hatchery.add_technician(name, quarter)
+                if hatchery.add_technician(name, q):
+                    continue
+                else:
+                    print(f"{name} is already hired. Please enter a different name")
         elif no_technician < 0:
-            for _ in range(abs(no_technician)):
+            for i in range(abs(no_technician)):
                 hatchery.remove_technician()
 
+        # initially the time_left will be the total labour time
+        time_left = float(hatchery.calculate_labour())
         """
         The next for loop is used to sell the fishes from the hatchery. The method created for selling fish in Hatchery i.e. 'sell_fish is called here.
         """
         for fish_name, fish in hatchery.fish_types.items():
-            sell = hatchery.sell_fish(fish_name, fish.demand)
+            sell = hatchery.sell_fish(fish_name, fish.demand, time_left)
             print(f"{fish.name}, demand {fish.demand}, sell {fish.demand}: {sell}")
+            time_left -= hatchery.calculate_required_labour(fish_name, fish.demand)
 
         # Pay expenses
         print(hatchery.pay_expenses())
 
         # Restock supplies
-        print("List of suppliers:")
+        print("\nList of suppliers:")
         for s, supplier in enumerate(hatchery.suppliers, start=1):
             print(f" {s}. {supplier.name}")
         while True:
             try:
                 vendor = int(input(">>> Enter number of vendor to purchase from: ")) - 1
                 if 0 <= vendor < len(hatchery.suppliers):
-                    print(hatchery.restock(hatchery.suppliers[vendor].name))
+                    vendor_select = hatchery.suppliers[vendor]
+                    print(f"The supplier selected for restocking is: {vendor_select.name}")
+                    print(hatchery.restock(vendor_select.name))
                     break
                 print("Invalid vendor number. Please enter a valid number.")
             except ValueError:
                 print("Invalid vendor input. Please enter a valid number.")
         
         # Display end-of-quarter state
-        print(f"Hatchery Cash Available: {hatchery.cash}")
+        print(f"\nHatchery Cash Available: {hatchery.cash}")
         for warehouse in hatchery.warehouse:
             print(f" {warehouse.supply}, {warehouse.main} (capacity={warehouse.main_max_capacity})")
             print(f" {warehouse.supply}, {warehouse.auxiliary} (capacity={warehouse.aux_max_capacity})")
@@ -95,10 +102,10 @@ def main():
             print(bankruptcy_status)
             break
 
-        print(f"END OF QUARTER {quarter}")
+        print(f"END OF QUARTER {q}")
 
     # Final state
-    print("=== FINAL STATE ===")
+    print("\n=== FINAL STATE ===")
     print(f"Cash: {hatchery.cash}")
     for warehouse in hatchery.warehouse:
         print(f" {warehouse.supply}, {warehouse.main} (capacity={warehouse.main_max_capacity})")
