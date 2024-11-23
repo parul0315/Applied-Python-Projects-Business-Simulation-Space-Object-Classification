@@ -47,29 +47,50 @@ def main():
         and 'remove_technician' from the class Hatchery.
         Params for 'add_technician': name (str), quarter (int)
         """
-        if no_technician > 0:
-            for i in range(no_technician):
-                name = input(">>> Enter technician name: ")
-                if hatchery.add_technician(name, q):
-                    continue
+        while True:
+            try:
+                if no_technician > 0:
+                    for i in range(no_technician):
+                        name = str(input(">>> Enter technician name: "))
+                        if name.isnumeric() or not name:
+                            raise ValueError 
+                        if hatchery.add_technician(name, q):
+                            continue
+                        else:
+                            print(f"{name} is already hired. Please enter a different name")
+                    break
+                elif no_technician < 0:
+                    for i in range(abs(no_technician)):
+                        hatchery.remove_technician()
+                    break
                 else:
-                    print(f"{name} is already hired. Please enter a different name")
-        elif no_technician < 0:
-            for i in range(abs(no_technician)):
-                hatchery.remove_technician()
+                    print("\nNo new technicians are added.")
+                    break
+            except ValueError:
+                print("Invalid input. Please enter a string value.")
+
 
         # initially the time_left will be the total labour time
         time_left = float(hatchery.calculate_labour())
         """
         The next for loop is used to sell the fishes from the hatchery. The method created for selling fish in Hatchery i.e. 'sell_fish is called here.
         """
+
         for fish_name, fish in hatchery.fish_types.items():
-            sell = hatchery.sell_fish(fish_name, fish.demand, time_left)
-            print(f"{fish.name}, demand {fish.demand}, sell {fish.demand}: {sell}")
-            time_left -= hatchery.calculate_required_labour(fish_name, fish.demand)
+            sell = 0
+            fish_time = hatchery.calculate_required_labour(fish.time, fish.demand)
+            if time_left >= fish_time:
+                sell = hatchery.sell_fish(fish_name, fish.demand, time_left)
+                print(f"{fish.name}, demand {fish.demand}, sell {fish.demand}: {sell}")
+                time_left -= fish_time
+            else:
+                time_left = 0
+                print(f"{fish.name}, demand {fish.demand}, sell {fish.demand}: 0")
+    
 
         # Pay expenses
         print(hatchery.pay_expenses())
+        print(hatchery.apply_depreciation())
 
         # Restock supplies
         print("\nList of suppliers:")
@@ -97,7 +118,7 @@ def main():
             print(f" Technician {tech.name}, weekly rate={tech.ratepw}")
         
         # Check for bankruptcy
-        bankruptcy_status = hatchery.bankrupcy()
+        bankruptcy_status = hatchery.bankrupt
         if bankruptcy_status:
             print(bankruptcy_status)
             break

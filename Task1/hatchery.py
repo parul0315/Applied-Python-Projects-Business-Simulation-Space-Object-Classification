@@ -40,12 +40,15 @@ class Hatchery:
     def add_technician(self, name, quarter, specialty=None):
                  
             if len(self.technicians) < self.max_technicians:
+                for techinician in self.technicians:
+                     if techinician.name == name:
+                        return False
                 new_technician = Technician(name, specialty=specialty)
                 self.technicians.append(new_technician)
-                print(f"Hired {self.technicians[-1].name}, weekly rate = 500, for quarter {quarter}")
+                print(f"Hired {new_technician.name}, weekly rate = 500, for quarter {quarter}")
                 return True
             else:
-                return "We already have the max amount of Technicians"
+                return False
                  
 
     def remove_technician(self):
@@ -60,10 +63,8 @@ class Hatchery:
         total_time = len(self.technicians) * 9
         return total_time
     
-    def calculate_required_labour(self, fish, actual_quantity):
-        if fish in self.fish_types:
-            fish = self.fish_types[fish]
-            return (fish.time * actual_quantity)
+    def calculate_required_labour(self, fish_time, actual_quantity):
+        return (fish_time * actual_quantity)
     
     def check_supplies(self, total_fertilizer_available, total_fertilizer, total_feed_available, total_feed, total_salt_available, total_salt):
         if (total_fertilizer_available >= total_fertilizer and 
@@ -96,7 +97,7 @@ class Hatchery:
                 total_salt = fish.salt * actual_quantity
 
                 #check if we have enough labour
-                required_labour = fish.time * actual_quantity
+                required_labour = self.calculate_required_labour(fish.time, actual_quantity)
                 print(f"Total labor available: {time_left} weeks")
                 print(f"Labor required: {required_labour} weeks")
                 
@@ -109,7 +110,7 @@ class Hatchery:
                      total_salt
                 )
                 labour_checker = self.check_labour(time_left, required_labour)
-
+                
                 if  supplies_checker and labour_checker:
                     self.cash += fish.price * actual_quantity
                     self.use_supplies(total_fertilizer, total_feed, total_salt)
@@ -123,7 +124,11 @@ class Hatchery:
                     elif supplies_checker and not labour_checker:
                         return f"\n\nInsufficient labour: required {required_labour} weeks, available {time_left} weeks"
                     else: 
-                        return f"\n\nInsufficient ingredients: \nfertiliser need {total_fertilizer} storage {total_fertilizer_available} \nfeed need {total_feed} storage {total_feed_available} \nsalt need {total_salt} storage {total_salt_available}\nInsufficient labour: required {required_labour} weeks, available {time_left}"
+                        return f"\n\nInsufficient ingredients: \
+                            \nfertiliser need {total_fertilizer} storage {total_fertilizer_available} \
+                            \nfeed need {total_feed} storage {total_feed_available} \
+                            \nsalt need {total_salt} storage {total_salt_available}\
+                            \nInsufficient labour: required {required_labour} weeks, available {time_left}"
             else:
                 return f"Invalid fish type"
         
@@ -152,9 +157,12 @@ class Hatchery:
 
             if self.cash >= total_cost:
                 self.cash -= total_cost
-                return f"(paid {total_cost} pounds in expenses with remaining balance: {self.cash})" # P: add remaining cash to output as well
+                return f"\n(paid {total_cost} pounds in expenses with remaining balance: {self.cash})" # P: add remaining cash to output as well
             else:
-                return f"(not enough cash to pay expenses)" # P: add required cash and cuurent cash here as well
+                print(f"\n(not enough cash to pay expenses)")
+                return self.bankruptcy()
+                
+                
         
     def restock(self, supplier_name):
             # initialize supplier variable
@@ -195,18 +203,13 @@ class Hatchery:
                 self.cash -= restock_cost
                 return f"supplies are restocked from {supplier.name} for £{restock_cost}"
             else:
-                self.bankrupt = True
-                return f"Not enough cash to restock supplies. Required: {restock_cost} pounds, Current cash: {self.cash} pounds" # A: add required and total cash
+                print(f"Not enough cash to restock supplies. Required: {restock_cost} pounds, Current cash: {self.cash} pounds")
+                return self.bankruptcy()
             
-    def bankrupcy(self):
-            #to check for bankrupcy at each step of the simulation
-            if self.cash <= 0:
-                self.bankrupt = True
-                return f"The hatchery is now bankrupt with the current cash: {self.cash} pounds"
-            return None
+    def bankruptcy(self):
+        #to check for bankrupcy at each step of the simulation
+        self.bankrupt = True
+        return f"The hatchery is now bankrupt with the current cash: {self.cash} pounds"
 
     def __str__(self):
             return f"Cash: £{self.cash}\nFish Types: {self.fish_types}\nWarehouse: {self.warehouse}\nSuppliers: {self.suppliers}\nTechnicians: {self.technicians}\nBankrupt: {self.bankrupt}"
-
-hatch = Hatchery()
-print(hatch)
