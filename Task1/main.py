@@ -19,34 +19,22 @@ def main():
             print("Number of quarters must be positive.")
         except ValueError:
             print("Invalid input. Please enter a valid number.")
-    
-    """
-    The for loop starts the simulation for the quarters given by the user. 
-    """
+
 
     for q in range(1, quarter + 1):
         print("\n================================")
         print(f"====== SIMULATING quarter {q} ======")
         print("================================")
-
-    
-        """
-        Once we have started the simulation for the first quarter, the next input taken by the user is the number of technicians to hire.
-        The input takes an int value and shows error if the value given is invalid.
-        """
+        
         while True:
             try:
-                no_technician = int(input("To add enter positive, to remove enter negative, no change enter 0.\n>>> Enter number of technicians: "))
+                no_technician = int(input("To add enter positive, to remove enter negative, no change enter 0.\
+                                          \n>>> Enter number of technicians: "))
                 break
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
         
-        """
-        The following loop is to add/remove the technician.
-        The if statement here checks for the number of technician used and the for loop calls the methods 'add_technician' 
-        and 'remove_technician' from the class Hatchery.
-        Params for 'add_technician': name (str), quarter (int)
-        """
+        
         while True:
             try:
                 if no_technician > 0:
@@ -72,9 +60,7 @@ def main():
 
         # initially the time_left will be the total labour time
         time_left = float(hatchery.calculate_labour())
-        """
-        The next for loop is used to sell the fishes from the hatchery. The method created for selling fish in Hatchery i.e. 'sell_fish is called here.
-        """
+       
 
         for fish_name, fish in hatchery.fish_types.items():
             sell = 0

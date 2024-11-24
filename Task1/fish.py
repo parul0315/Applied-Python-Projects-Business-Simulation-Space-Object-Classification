@@ -3,13 +3,13 @@ class Fish:
     initializing the fish class with the required attributes. 
     """
     def __init__(self, name, fertilizer, feed, salt, time, demand, price):
-        self.name = name
-        self.fertilizer = fertilizer
-        self.feed = feed
-        self.salt = salt
-        self.time = time / 5
-        self.price = price
-        self.demand = demand
+        self.name = name    #name of the fish
+        self.fertilizer = fertilizer    #the amount of fertilizer needed for the fish
+        self.feed = feed    #the amount of feed needed
+        self.salt = salt    #the amount of salt needed
+        self.time = time / 5    #the time required to harvest each fish (in weeks)
+        self.price = price     #the price of each fish
+        self.demand = demand    #the demand of each fish per quarter
 
 # Requirements of each species along with the demand and price.
 # fish_type = [

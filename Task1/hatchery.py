@@ -6,13 +6,22 @@ from warehouse import Warehouse
 class Hatchery:
     """
     Hatchery class contains attributes and associated functions about the supplies, cash status, and number of technicians.
+    
+    Attributes:
+    cash(int) - The current cash of the hatchery
+    technicians (list) - the list of technicians working at the hatchery
+    max_technicians (int) - the initialized value of the maximum number of technicians that can work at the hatchery per quarter
+    fish_types (dict) - dictionary of the fishes that are available at the hatchery
+    warehouse (list) - list of supplies stored in warehouse
+    suppliers (list) - list of suppliers for purchasing supplies to restock the warehouses
+    bankrupt (bool) - value to check if the hatchery has gone bankrupt 
     """
     def __init__(self, cash = 10000):
         """
-        Initializing the cash balance of £10,000 at the beginning.
+        Initializing the cash balance of £10,000, fish types, warehouse and suppliers at the beginning.
         """
         self.cash = cash
-        self.technicians = []
+        self.technicians = []   #initializing a list to add technicians
         self.max_technicians = 5
         self.fish_types = {
             "Clef Fins": Fish("Clef Fins", 0.1, 12, 2, 2.0, 25, 250),
@@ -22,36 +31,49 @@ class Hatchery:
             "Fugue Flounder": Fish("Fugue Flounder", 0.2, 12, 2, 2.5, 30, 550),
             "Modal Bass": Fish("Modal Bass", 0.3, 12, 6, 3.0, 50, 500)
         }
-
-        """
-        Initializing the warehouse and the supplier values.
-        """
+        #intializing the warehouse for supplies
         self.warehouse = [
             Warehouse("fertilizer", 20, 10, 0.4, 0.1),
             Warehouse("feed", 400, 200, 0.1, 1),
             Warehouse("salt", 200, 100, 0.1, 1)
         ]
+
+        #initializing the suppliers for restocking
         self.suppliers = [
             Supplier("Slippery Lakes", 0.30, 0.10, 0.05),
             Supplier("Scaly Wholesaler", 0.20, 0.40, 0.25)
         ]
-        self.bankrupt = False
+        
+        self.bankrupt = False   #the hatchery is set to be not bankrupt at the start
 
     def add_technician(self, name, quarter, specialty=None):
-                 
-            if len(self.technicians) < self.max_technicians:
-                for techinician in self.technicians:
-                     if techinician.name == name:
-                        return False
-                new_technician = Technician(name, specialty=specialty)
-                self.technicians.append(new_technician)
-                print(f"Hired {new_technician.name}, weekly rate = 500, for quarter {quarter}")
-                return True
-            else:
-                return False
+        """
+        adds the technicians to the hatchery.
+
+        Parameters:
+        name (str) - name of the technician
+        quarter (int) - the quarter for which technician is being hired for
+        specialty (str) - the fish type in which the technician specializes in (if any)
+
+        Return:
+        bool - it is true if the technician is added, false if otherwise
+        """
+        if len(self.technicians) < self.max_technicians:
+            for techinician in self.technicians:
+                    if techinician.name == name:    #checking if the name of the technician is being repeated
+                        return False    # the name isn't added if the name is repeated
+            new_technician = Technician(name, specialty=specialty)
+            self.technicians.append(new_technician)     #the new technician is added into the list of technicians
+            print(f"Hired {new_technician.name}, weekly rate = 500, for quarter {quarter}")
+            return True
+        else:
+            return False
                  
 
     def remove_technician(self):
+            """
+            
+            """
             if len(self.technicians) > 0:
                 print(f"Let go of {self.technicians[-1].name}")
                 self.technicians.pop()
@@ -66,7 +88,16 @@ class Hatchery:
     def calculate_required_labour(self, fish_time, actual_quantity):
         return (fish_time * actual_quantity)
     
-    def check_supplies(self, total_fertilizer_available, total_fertilizer, total_feed_available, total_feed, total_salt_available, total_salt):
+    def check_supplies(
+              self, 
+              total_fertilizer_available, 
+              total_fertilizer, 
+              total_feed_available, 
+              total_feed, 
+              total_salt_available, 
+              total_salt
+              ):
+        
         if (total_fertilizer_available >= total_fertilizer and 
             total_feed_available >= total_feed and 
             total_salt_available >= total_salt):
@@ -157,7 +188,7 @@ class Hatchery:
 
             if self.cash >= total_cost:
                 self.cash -= total_cost
-                return f"\n(paid {total_cost} pounds in expenses with remaining balance: {self.cash})" # P: add remaining cash to output as well
+                return f"\n(paid {total_cost} pounds in expenses with remaining balance: {self.cash})"
             else:
                 print(f"\n(not enough cash to pay expenses)")
                 return self.bankruptcy()
@@ -181,8 +212,8 @@ class Hatchery:
 
             # calculate the amount of each stock to be refilled and the cost for them.
             for w in self.warehouse:
-                main_need = max(0, w.main_max_capacity - w.main) # P: the max capacity function here returns the capacity of main + aux so we cant use that here, better to add variable in the warehouse class to hold the max capacity for that warehouse
-                aux_need = max(0, w.aux_max_capacity - w.auxiliary) # P: ditto as above
+                main_need = max(0, w.main_max_capacity - w.main) 
+                aux_need = max(0, w.aux_max_capacity - w.auxiliary)
                 if w.supply == "fertilizer":
                     cost = (main_need + aux_need) * supplier.fertilizer_rate
                 elif w.supply == "feed":
@@ -212,4 +243,6 @@ class Hatchery:
         return f"The hatchery is now bankrupt with the current cash: {self.cash} pounds"
 
     def __str__(self):
-            return f"Cash: £{self.cash}\nFish Types: {self.fish_types}\nWarehouse: {self.warehouse}\nSuppliers: {self.suppliers}\nTechnicians: {self.technicians}\nBankrupt: {self.bankrupt}"
+            return f"Cash: £{self.cash}\nFish Types: {self.fish_types}\
+                \nWarehouse: {self.warehouse}\nSuppliers: {self.suppliers}\
+                \nTechnicians: {self.technicians}\nBankrupt: {self.bankrupt}"
