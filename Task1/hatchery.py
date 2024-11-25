@@ -72,20 +72,39 @@ class Hatchery:
 
     def remove_technician(self):
             """
-            
+            removes the technician from the hatchery
+
+            Parameters: None
+            Return: 
+            str - a text is printed to indicate if the technician was let go or not
             """
             if len(self.technicians) > 0:
                 print(f"Let go of {self.technicians[-1].name}")
-                self.technicians.pop()
+                self.technicians.pop()     #the technician is removed from the list of technicians
             else:
                 return "No technicians available to let go"
             
     def calculate_labour(self):
+        """
+        calculates the total labour weeks that are available in a quarter
+
+        Returns: 
+        total_time (int) - total number of weeks of labour available in a quarter
+        """
          # Calculate totale labour available
-        total_time = len(self.technicians) * 9
+        total_time = len(self.technicians) * 9    #each technician works for 9 weeks in a quarter
         return total_time
     
     def calculate_required_labour(self, fish_time, actual_quantity):
+        """
+        calculates the required labour for a fish type
+
+        Parameters:
+        fish_time - time required to maintain one fish of a specific type
+        actual_quantity - the amount of fish that is to be sold
+        Return:
+        int - the required labour weeks to maintain and sell fish   
+        """
         return (fish_time * actual_quantity)
     
     def check_supplies(
@@ -97,6 +116,20 @@ class Hatchery:
               total_salt_available, 
               total_salt
               ):
+        """
+        checks if there are enough supplies to sell fish
+
+        Parameters:
+        total_fertilizer_available (float) - the fertilizer that is available in storage (including both warehouses)
+        total_fertilizer (float) - fertilizer that is required
+        total_feed_available (int) - feed that is available in storage
+        total_feed (int) - feed that is required
+        total_salt_available (int) - salt that is available in storage
+        total_salt (int) - salt that is required
+
+        Return:
+        bool - True if all the conditions are met and there are enough supplies to sell the fish, false if otherwise.
+        """
         
         if (total_fertilizer_available >= total_fertilizer and 
             total_feed_available >= total_feed and 
@@ -107,12 +140,32 @@ class Hatchery:
          
          
     def check_labour(self, total_time, required_labour):
+        """
+        checks if there is enough labour for selling fish
+
+        Parameters:
+        total_time - time that is provided by the labour (in weeks)
+        required_labour - time that is required to harvest fish (in weeks)
+        Return:
+        bool - True if the required labour is less than or equal to total time, false if otherwise
+        """
         if (total_time >= required_labour):
             return True
         else:
             return False
         
     def sell_fish(self, fish_type, quantity, time_left):
+            """
+            Sells a specific type of fish if the supplies and labour are sufficient
+
+            Parameters:
+            fish_type (str) - the type of fish that is to be sold
+            quantity (int) - the amount of fish to be sold
+            time_left (int) - the available labour weeks
+
+            Return:
+            str - a text is printed to indicate if the amount of fish was sold or not.
+            """
             if fish_type in self.fish_types:
                 fish = self.fish_types[fish_type]
             
@@ -164,81 +217,125 @@ class Hatchery:
                 return f"Invalid fish type"
         
     def use_supplies(self, fertilizer, feed, salt):
-            supplies = [fertilizer, feed, salt]
-            for i, supply in enumerate(supplies):
-                total_available = self.warehouse[i].main + self.warehouse[i].auxiliary
-                if supply > total_available:
-                    raise ValueError(f"Not enough {self.warehouse[i].supply} available")
-                elif supply > self.warehouse[i].main:
-                    self.warehouse[i].auxiliary -= supply - self.warehouse[i].main
-                    self.warehouse[i].main = 0
-                else:
-                    self.warehouse[i].main -= supply
+        """
+        removes supplies from the warehouse that have been used to harvest the fish.
+
+        Parameters:
+        fertilizer (float): amount of fertilizer to use
+        feed (float): amount of feed to use
+        salt (float): amount of salt to use
+
+        Raises:
+        ValueError - if the supplies are not sufficient for the fish 
+        """
+        supplies = [fertilizer, feed, salt]
+        for i, supply in enumerate(supplies):
+            #calculates the total available supplies in main and auxiliary combined
+            total_available = self.warehouse[i].main + self.warehouse[i].auxiliary
+            if supply > total_available:
+                raise ValueError(f"Not enough {self.warehouse[i].supply} available")
+            elif supply > self.warehouse[i].main:
+                #the supplies are taken from the auxiliary if the main warehouse doesn't have enough
+                self.warehouse[i].auxiliary -= supply - self.warehouse[i].main
+                self.warehouse[i].main = 0
+            else:
+                #deducts the supplies from the main warehouse
+                self.warehouse[i].main -= supply
 
     def apply_depreciation(self):
-            for w in self.warehouse:
-                w.deprecate()
-            return "applied depreciation to the main and auxiliary warehouses"
+        """
+        applies the depreciation to the supplies in the main and auxiliary warehouse
+
+        Return:
+        str - text that displays that the depreciation is applied to the warehouses
+        """
+        for w in self.warehouse:
+            w.deprecate()   #applied depreciation logic to the warehouses
+        return "applied depreciation to the main and auxiliary warehouses"
 
     def pay_expenses(self):
-            fixed_cost = 1500
-            technician_cost = sum(tech.pay_perquarter() for tech in self.technicians)
-            ware_cost = sum(w.warehouse_cost() for w in self.warehouse)
-            total_cost = fixed_cost + technician_cost + ware_cost
+        """
+        deduces the expenses from the cash in the hatchery
 
-            if self.cash >= total_cost:
-                self.cash -= total_cost
-                return f"\n(paid {total_cost} pounds in expenses with remaining balance: {self.cash})"
-            else:
-                print(f"\n(not enough cash to pay expenses)")
-                return self.bankruptcy()
+        Return:
+        str - a text that displays that the expenses are paid
+        """
+        fixed_cost = 1500   #fixed cost that needs to paid every quarter
+        technician_cost = sum(tech.pay_perquarter() for tech in self.technicians)   #total cost that needs to be paid to the technicians
+        ware_cost = sum(w.warehouse_cost() for w in self.warehouse) #storage cost of the warehouses combined
+        total_cost = fixed_cost + technician_cost + ware_cost   #sum of all the costs for the quarter
+
+        if self.cash >= total_cost:
+            #deducts the total cost from the cash in the hatchery
+            self.cash -= total_cost
+            return f"\n(paid {total_cost} pounds in expenses with remaining balance: {self.cash})"
+        else:
+            #if the cash is less than the total cost, the hatchery goes bankrupt
+            print(f"\n(not enough cash to pay expenses)")
+            return self.bankruptcy()
                 
                 
         
     def restock(self, supplier_name):
-            # initialize supplier variable
-            supplier = None
-            # find the supplier using the supplier name
-            for s in self.suppliers:
-                if s.name == supplier_name:
-                    supplier = s
-                    break
-            if supplier is None:
-                print("No matching supplier is found")
-                return None
-                
-            # initialize the cost of restocking
-            restock_cost = 0
+        """
+        restock the supplies in the warehouse from a specific supplier
 
-            # calculate the amount of each stock to be refilled and the cost for them.
-            for w in self.warehouse:
-                main_need = max(0, w.main_max_capacity - w.main) 
-                aux_need = max(0, w.aux_max_capacity - w.auxiliary)
-                if w.supply == "fertilizer":
-                    cost = (main_need + aux_need) * supplier.fertilizer_rate
-                elif w.supply == "feed":
-                    cost = (main_need + aux_need) * supplier.feed_rate
-                elif w.supply == "salt":
-                    cost = (main_need + aux_need) * supplier.salt_rate
-                else:
-                    cost = 0
-                
-                restock_cost += cost
-                # update warehouse stock levels after restocking
-                if main_need > 0:
-                    w.main += main_need
-                if aux_need > 0:
-                    w.auxiliary += aux_need
+        Parameter:
+        supplier_name - the name of the supplier
+
+        Return:
+        str - a text that displays that the warehouses have been restocked
+        """
+        # initialize supplier variable
+        supplier = None
+        # find the supplier using the supplier name
+        for s in self.suppliers:
+            if s.name == supplier_name:
+                supplier = s
+                break
+        if supplier is None:
+            print("No matching supplier is found")
+            return None
             
-            if self.cash >= restock_cost:
-                self.cash -= restock_cost
-                return f"supplies are restocked from {supplier.name} for £{restock_cost}"
+        # initialize the cost of restocking
+        restock_cost = 0
+
+        # calculate the amount of each stock to be refilled and the cost for them in both main and auxiliary respectively
+        for w in self.warehouse:
+            main_need = max(0, w.main_max_capacity - w.main) 
+            aux_need = max(0, w.aux_max_capacity - w.auxiliary)
+            if w.supply == "fertilizer":
+                cost = (main_need + aux_need) * supplier.fertilizer_rate
+            elif w.supply == "feed":
+                cost = (main_need + aux_need) * supplier.feed_rate
+            elif w.supply == "salt":
+                cost = (main_need + aux_need) * supplier.salt_rate
             else:
-                print(f"Not enough cash to restock supplies. Required: {restock_cost} pounds, Current cash: {self.cash} pounds")
-                return self.bankruptcy()
+                cost = 0
+            
+            restock_cost += cost
+            # update warehouse stock levels after restocking
+            if main_need > 0:
+                w.main += main_need
+            if aux_need > 0:
+                w.auxiliary += aux_need
+        
+        if self.cash >= restock_cost:
+            #deduct the cost of restocking from the cash in hatchery
+            self.cash -= restock_cost
+            return f"supplies are restocked from {supplier.name} for £{restock_cost}"
+        else:
+            #if the supplies can't be restocked, the hatcery has gone bankrupt
+            print(f"Not enough cash to restock supplies. Required: {restock_cost} pounds, Current cash: {self.cash} pounds")
+            return self.bankruptcy()
             
     def bankruptcy(self):
-        #to check for bankrupcy at each step of the simulation
+        """
+        declares that the hatchery has gone bankrupt
+
+        Return:
+        str - a text is displayed that shows the hatchery is bankrupt now
+        """
         self.bankrupt = True
         return f"The hatchery is now bankrupt with the current cash: {self.cash} pounds"
 

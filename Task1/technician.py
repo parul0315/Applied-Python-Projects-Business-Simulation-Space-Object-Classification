@@ -43,4 +43,4 @@ class Technician:
         if self.specialty == fish_type.name:
             #the base time is reduced to 2/3 of the original time required if the technician specialised in that fish
             maintenance_time *= 2/3     
-        return maintenance_time     #the adjusted maintenance time for the fish
+        return maintenance_time    #the adjusted maintenance time for the fish
