@@ -68,25 +68,36 @@ Attributes:<br/>
 `feed_rate` - the rate for the feed by the supplier<br/>
 `salt_rate` - the rate for the salt by the supplier<br/>
 
+### 4. Hatchery
+The hatchery class works as the central hub of the simulation, encapsulating all the methods that are required for the hatchery management. It brings together all the other classes and uses their components to manage various tasks of the hatchery. It oversees the hiring of the technician, selling fish, using and restocking supplies, applying depreciation, paying expenses and checking for banrupcy at each step of the simulation. To understand how the hatchery is created the following flowchart is designed for a better understanding.<br/>
+The flow of the simulation can be described through the following flowchart:<br/>
 
+**Start simulation -> Set number of quarters -> Add/remove technician -> Sell fish -> Pay expenses -> Restock supplies ->Check for bankrupcy -> End of quarter status -> End simulation**<br/>
 
+Each of the hatchery methods are created to do these specific tasks for the simulation.
 
+Attributes:<br/>
+`cash` - The current cash of the hatchery<br/>
+`technicians` - the list of technicians working at the hatchery<br/>
+`max_technicians` - the initialized value of the maximum number of technicians that can work at the hatchery per quarter<br/>
+`fish_types` - dictionary of the fishes that are available at the hatchery<br/>
+`warehouse` - list of supplies stored in warehouse<br/>
+`suppliers` - list of suppliers for purchasing supplies to restock the warehouses<br/>
+`bankrupt` - value to check if the hatchery has gone bankrupt<br/>
 
+Methods:<br/>
+`__init__` initializes the cash balance of the hatchery at £10,000 at the start, the fish types, warehouse and suppliers.<br/>
 
+`add_technician` adds the technician to the list of technicians that are working at the hatchery for a given quarter. It ensures that no two technicians are given the same name, the number of technicians doesn't exceed 5 and returns a message that indicates the hiring of the technician.
 
+`remove_technician` removes the technician that the user select from the hatchery. It ensures that the hatchery always have atleast one technician working and removes the last hired technician from the list. It returns the message indicating whether the technician was removed or not.
 
+`calculate_labour` calculates the total labour that is available for a quarter (in weeks). The number of technician hired is multiplies by 9 since each technican works for 9 weeks in one quarter.
 
-The flow of the simulation can be described through the following flowchart:
-Start simulation -> Set number of quarters -> Add/remove technician -> Sell fish -> Pay expenses -> Restock supplies -> End of quarter status -> Check for bankrupcy -> End simulation
+`calculate_required_labour` calculates the required labour for a fish type (in weeks).
 
-From this flowchart, we get a better understanding of all the classes and the methods we need to create in them respectively.
+`check_supplies` is created as an indicator for checking if the warehouse has enough supplies for harvesting a fish type. Its attributes involve all the supplies that are available and the supplies amount that is required for the fish type. It returns a simple bool value which is true if the conditions are met and is false given otherwise. This functions help encapsulate the checking process of the supplies which is essential for selling fish and can be called later while we sell fish.
 
-I created the 5 separate files for each of the classes I created.
-fish.py
-I started by creating the fish class - in which I initialized the class with the required attributes. The information provided regarding the fish was the name, fertilizer, feed, salt, time and in a different table we were provided with the demand and price of the fish quarterly. Since there are all static values and are related to the fish, I decided to add them in the __init__ function and initialize them. By doing so, this class made it easier to call all the fish related attributes since they are all contained in one class.
+`sell_fish` is a method that checks for all the conditions that are required to sell a fish. Once all the conditions are met, it sells the required fish amount. It starts by selecting a fish type from the class Fish, then all the available supplies are accounted for. Next, we make sure that the quantity of fish being sold does not exceed the demand. The supplies and labour requirements are checked and then the required amount of fish is sold. The method uses if statements to check for each condition and displays the appropriate messages. It also ensures that the user inputs errors are handled.
 
-technician.py
-The next class created is Technician. This particular class defines the technicians that work in the hatchery. The technicians have names, the rate of their labour per week which is £500 per week. The labour weeks provided by the technician is 9 weeks. The point to note is that even tho the technicians work for 9 weeks, the pay is given for the entire quarter which is 12 weeks. Once we initialized the main attributes of the technicians, I created 2 methods namely 'pay_perquarter()' and 'maintain_fish'. The 'pay_perquarter()' is a method used to calculate the total pay of the technician in each quarter. The 'maintain_fish' is a method created for calculating the maintainance time taken by the technician in a fish that they specialize in. Since the maintainance time is reduced by 2/3rd of its original value if a technician specialise in that specific fish, this method is important for extending the code at a later stage.
-
-supplier.py
-The supplier class contained the 
+`use_supplies` 

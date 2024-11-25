@@ -198,7 +198,7 @@ class Hatchery:
                 if  supplies_checker and labour_checker:
                     self.cash += fish.price * actual_quantity
                     self.use_supplies(total_fertilizer, total_feed, total_salt)
-                    return f"Sold {actual_quantity} {fish_type} for {fish.price * actual_quantity} pounds"
+                    return f"Sold {actual_quantity} {fish_type} for £{fish.price * actual_quantity}"
                 else:
                     if labour_checker and not supplies_checker:
                         return f"\n\nInsufficient ingredients: \
@@ -268,7 +268,7 @@ class Hatchery:
         if self.cash >= total_cost:
             #deducts the total cost from the cash in the hatchery
             self.cash -= total_cost
-            return f"\n(paid {total_cost} pounds in expenses with remaining balance: {self.cash})"
+            return f"\n(paid £{total_cost} in expenses with remaining balance: {self.cash})"
         else:
             #if the cash is less than the total cost, the hatchery goes bankrupt
             print(f"\n(not enough cash to pay expenses)")
@@ -326,7 +326,7 @@ class Hatchery:
             return f"supplies are restocked from {supplier.name} for £{restock_cost}"
         else:
             #if the supplies can't be restocked, the hatcery has gone bankrupt
-            print(f"Not enough cash to restock supplies. Required: {restock_cost} pounds, Current cash: {self.cash} pounds")
+            print(f"Not enough cash to restock supplies. Required: £{restock_cost}, Current cash: £{self.cash}")
             return self.bankruptcy()
             
     def bankruptcy(self):
@@ -337,7 +337,7 @@ class Hatchery:
         str - a text is displayed that shows the hatchery is bankrupt now
         """
         self.bankrupt = True
-        return f"The hatchery is now bankrupt with the current cash: {self.cash} pounds"
+        return f"The hatchery is now bankrupt with the current cash: £{self.cash}"
 
     def __str__(self):
             return f"Cash: £{self.cash}\nFish Types: {self.fish_types}\

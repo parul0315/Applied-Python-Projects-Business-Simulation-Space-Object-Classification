@@ -4,7 +4,8 @@ def main():
     """
     The number of quarters is taken as an input from the user. The input takes an int value, and prompts the user
     to enter an int value and gives an error when the user gives an negative value or an invalid data type value.
-    Param: str (prompt)
+    Parameter: 
+    str (prompt)
     return: int
     """
 
