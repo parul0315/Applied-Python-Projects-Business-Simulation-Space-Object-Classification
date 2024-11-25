@@ -9,31 +9,71 @@ The project consists of several classes that are interconnected, each representi
 ## Classes and their functions
 
 ### 1. Fish Class
-The fish class represents the different types of fish in the hatchery. Each fish type has its attributes, its demand and the price.
+The fish class represents the core product of the hatchery i.e., the fish specied being harvestd and sold. Each fish type is defined by its attributes which are the supplies required by each type and maintenance time. The class also keeps track of the financial properties of the fish which are its price and demand. All these attributes are encapsulated in the fish class, providing a foundation which ensures that each fish's characteristics are applied consistently throughout the simulation.
 
-Methods:
+Methods:<br/>
 `__init__` intialized the fish attributes
 
-Attributes:
-`name` - name of the fish
-`fertilizer` - the amount of fertilizer needed for the fish
-`feed` - the amount of feed needed for the fish
-`salt` - the amount of salt needed for the fish
-`time` - the time required to maintain each fish type
-`price` - the price of each fish type
-`demand` - the demand of each fish type
+Attributes:<br/>
+`name` - name of the fish<br/>
+`fertilizer` - the amount of fertilizer needed for the fish<br/>
+`feed` - the amount of feed needed for the fish<br/>
+`salt` - the amount of salt needed for the fish<br/>
+`time` - the time required to maintain each fish type<br/>
+`price` - the price of each fish type<br/>
+`demand` - the demand of each fish type<br/>
 
 ### 2. Technician
-The technician class represents the workers that work in the hatchery. This class is used to manage the labour availability and the cost incured in each quarter.
-
-Methods:
-__init__ initialized a technician in the hatchery. Each technician had its own attributes like the weekly pay, number of working weeks and any specialization. 
+The technician class represents the workers that work in the hatchery. Each technician is defined by their name, pay per week, and if they specialize in any fish type. This class is critical for managing all the labour hiring and their availability, cost incured and the specialization of the technician that can reduce the maintenance time for the fish, making the hatchery more productive and profitable.
 
 Attributes:<br/>
-`name` - the name of the technician
-`ratepw` - the weekly pay of the technician which is £500
-`specialty` - the fish type in which the technician specializes in
+`name` - the name of the technician<br/>
+`ratepw` - the weekly pay of the technician which is £500<br/>
+`specialty` - the fish type in which the technician specializes in<br/>
 `labour_weeks` - the number of weeks that the technician works for
+
+Methods:<br/>
+`__init__` initialized a technician in the hatchery. Each technician had its own attributes like the weekly pay, number of working weeks and any specialization. 
+
+`pay_perquarter` is used to calculate the pay of each technician per quarter. The technicians are paid for 12 weeks in each quarter. Therefore, the total amount is calculated accordingly.
+
+`maintain_fish` is a method that is used in the extension of the project. Each technician specializes in one fish which reduced the maintainance time for that specific fish type to 2/3rd of its original time. Therefore, this method is used to calculate the new maintenance time for the fish type given that the technician specialises in that fish type.
+
+### 3. Warehouse
+The warehouse class represents the supplies that are stored in the warehouses, namely main and auxiliary warehouse. The supplies that are stored are fertilizer, feed and salt respectively. This class ensures encapsulation of all the supplies and their maximum limit in each warehouse, accounts for the depreciation of the supplies and calculates the warehouse storage costs. All these factors offers a more realistic approach to the management of the hatchery, prompting the user to manage the resources and plan accordingly.
+
+Attributes:<br/>
+`supply` - the type of supply (i.e. fertilizer, feed, salt)<br/>
+`main` - the amount of supply stored in the main warehouse<br/>
+`auxiliary` - the amount of supply stored in the auxiliary warehouse<br/>
+`depreciation` - the depreciation per quarter for the supply<br/>
+`costs` - cost of the storage space per unit for the supply<br/>
+
+Methods:<br/>
+`__init__` initialized a supply type in the warehouses, its depreciation rate and cost for the warehouse storage per unit.
+
+`deprecate` applies the depreciation to the unused supplies by the end of the quarter. It subtracts the depreciated amount from the supplies amount that is in the warehouse. 
+
+`warehouse_cost` calculates the cost incured through the storage space taken up by the supplies in the warehouses. This method calculates the total cost for each supply from both the main and the auxiliary warehouses. 
+
+### 4. Supplier
+The supplier class represents the supplier from which the hatchery restocks its supplies. Each supplier has different rates for each of the supplies, and the user is prompted to make the decision based on the cost efficiency for the hatchery. This class serves as a place to store all the pricing information of the supplies.
+
+Methods:<br/>
+`__init__` initialized a supplier with the required attributes, which are their name and rates provided for each supply.
+
+Attributes:<br/>
+`name` - the name of the supplier<br/>
+`fertilizer_rate` - the rate for the fertilizer by the supplier<br/>
+`feed_rate` - the rate for the feed by the supplier<br/>
+`salt_rate` - the rate for the salt by the supplier<br/>
+
+
+
+
+
+
+
 
 
 The flow of the simulation can be described through the following flowchart:

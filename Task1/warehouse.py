@@ -1,7 +1,7 @@
 import math
 class Warehouse:
     """
-    The warehouse class represents the main and auxiliary storage space, along with the per quarter depreciation and costs.
+    The warehouse class represents supplies in the main and auxiliary storage space, along with the per quarter depreciation and costs.
     """
     def __init__(self, supply, main, auxiliary, depreciation, costs):
         """
