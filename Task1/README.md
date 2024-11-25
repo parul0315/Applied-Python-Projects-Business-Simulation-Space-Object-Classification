@@ -27,7 +27,14 @@ Attributes:
 The technician class represents the workers that work in the hatchery. This class is used to manage the labour availability and the cost incured in each quarter.
 
 Methods:
-__init__
+__init__ initialized a technician in the hatchery. Each technician had its own attributes like the weekly pay, number of working weeks and any specialization. 
+
+Attributes:<br/>
+`name` - the name of the technician
+`ratepw` - the weekly pay of the technician which is £500
+`specialty` - the fish type in which the technician specializes in
+`labour_weeks` - the number of weeks that the technician works for
+
 
 The flow of the simulation can be described through the following flowchart:
 Start simulation -> Set number of quarters -> Add/remove technician -> Sell fish -> Pay expenses -> Restock supplies -> End of quarter status -> Check for bankrupcy -> End simulation
