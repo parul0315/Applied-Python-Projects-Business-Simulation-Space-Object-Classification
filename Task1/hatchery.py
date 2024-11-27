@@ -46,7 +46,35 @@ class Hatchery:
         
         self.bankrupt = False   #the hatchery is set to be not bankrupt at the start
 
-    def add_technician(self, name, quarter, specialty=None):
+    def prompt_specialty(self):
+        while True:
+            try:
+                fish_id = int(input("Enter the fish type the technician specializes in.\
+                                    \n Choose from the following options:\
+                                    \n 0. No specialty\
+                                    \n 1. Clef Fins\
+                                    \n 2. Timpani Snapper\
+                                    \n 3. Andalsian Brim\
+                                    \n 4.Plagal Cod\
+                                    \n 5.Fugue Founder\
+                                    \n 6.Modal Bass\n"))
+
+                if fish_id < 0 or fish_id > len(self.fish_types):
+                    raise IndexError
+                
+                if fish_id ==0:
+                    return 'None'
+                else:
+                    fish_name = list(self.fish_types.keys())[fish_id - 1]
+                    return fish_name
+                
+            except ValueError:
+                print('\nInvalid input. Please enter a valid number')
+            except IndexError:
+                print('\nThe number entered is out range. Please enter a number between 0-6.')
+
+
+    def add_technician(self, name, quarter, specialty):
         """
         adds the technicians to the hatchery.
 
@@ -64,7 +92,7 @@ class Hatchery:
                         return False    # the name isn't added if the name is repeated
             new_technician = Technician(name, specialty=specialty)
             self.technicians.append(new_technician)     #the new technician is added into the list of technicians
-            print(f"Hired {new_technician.name}, weekly rate = 500, for quarter {quarter}")
+            print(f"\nHired {new_technician.name}, weekly rate = 500, for quarter {quarter}, specializing in {specialty}")
             return True
         else:
             return False
@@ -82,7 +110,7 @@ class Hatchery:
                 print(f"Let go of {self.technicians[-1].name}")
                 self.technicians.pop()     #the technician is removed from the list of technicians
             else:
-                return "No technicians available to let go"
+                return "\nNo technicians available to let go"
             
     def calculate_labour(self):
         """
@@ -179,10 +207,18 @@ class Hatchery:
                 total_fertilizer = fish.fertilizer * actual_quantity
                 total_feed = fish.feed * actual_quantity
                 total_salt = fish.salt * actual_quantity
+                
+                is_specialized = False
+                if any (t.specialty == fish.name for t in self.technicians):
+                    is_specialized = True
 
-                #check if we have enough labour
-                required_labour = self.calculate_required_labour(fish.time, actual_quantity)
-                print(f"Total labor available: {time_left} weeks")
+                if is_specialized == True:
+                    required_labour = actual_quantity * (fish.time *(2/3))
+
+                else:
+                    #check if we have enough labour
+                    required_labour = self.calculate_required_labour(fish.time, actual_quantity)
+                print(f"\nTotal labor available: {time_left} weeks")
                 print(f"Labor required: {required_labour} weeks")
                 
                 supplies_checker = self.check_supplies(
@@ -251,7 +287,7 @@ class Hatchery:
         """
         for w in self.warehouse:
             w.deprecate()   #applied depreciation logic to the warehouses
-        return "applied depreciation to the main and auxiliary warehouses"
+        return "\napplied depreciation to the main and auxiliary warehouses"
 
     def pay_expenses(self):
         """
@@ -323,10 +359,10 @@ class Hatchery:
         if self.cash >= restock_cost:
             #deduct the cost of restocking from the cash in hatchery
             self.cash -= restock_cost
-            return f"supplies are restocked from {supplier.name} for £{restock_cost}"
+            return f"\nsupplies are restocked from {supplier.name} for £{restock_cost}"
         else:
             #if the supplies can't be restocked, the hatcery has gone bankrupt
-            print(f"Not enough cash to restock supplies. Required: £{restock_cost}, Current cash: £{self.cash}")
+            print(f"\nNot enough cash to restock supplies. Required: £{restock_cost}, Current cash: £{self.cash}")
             return self.bankruptcy()
             
     def bankruptcy(self):

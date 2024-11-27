@@ -46,7 +46,7 @@ def main():
         while True:
             # getting the number of technicians to add/remove
             try:
-                no_technician = int(input("To add enter positive, to remove enter negative, no change enter 0.\
+                no_technician = int(input("\nTo add enter positive, to remove enter negative, no change enter 0.\
                                           \n>>> Enter number of technicians: "))
                 break
             except ValueError:
@@ -56,16 +56,22 @@ def main():
         while True:
             try:
                 if no_technician > 0:
+                    if len(hatchery.technicians) + no_technician > 5:
+                        raise ValueError("Cannot hire more than 5 technicians in total.")
                     #adding the technicians
                     for i in range(no_technician):
-                        name = str(input(">>> Enter technician name: "))
+                        name = str(input("\n>>> Enter technician name: "))
                         if name.isnumeric() or not name:
-                            raise ValueError    #ValueError for non string values
-                        if hatchery.add_technician(name, q):
+                            raise ValueError("Invalid input. Please enter a string value.")    #ValueError for non string values
+                        
+                        specialty = hatchery.prompt_specialty()
+
+                        if hatchery.add_technician(name, q, specialty=specialty):
                             continue
                         else:
-                            print(f"{name} is already hired. Please enter a different name")
+                            print(f"\n{name} is already hired. Please enter a different name")
                     break
+
                 elif no_technician < 0:
                     #removing the technicians
                     for i in range(abs(no_technician)):
@@ -75,8 +81,8 @@ def main():
                     # no change in the number of technicians
                     print("\nNo new technicians are added.")
                     break
-            except ValueError:
-                print("Invalid input. Please enter a string value.")
+            except ValueError as ve:
+                print(ve)
 
 
         # initially the time_left will be the total labour time
@@ -87,17 +93,22 @@ def main():
             sell = 0
             fish_time = hatchery.calculate_required_labour(fish.time, fish.demand)
 
+            is_specialized = any(t.specialty ==  fish.name for t in hatchery.technicians)
+
+            if is_specialized:
+                fish_time *= 2/3
+
             #checking if the labour weeks available 
             if time_left >= fish_time:  
                 sell = hatchery.sell_fish(fish_name, fish.demand, time_left)
-                print(f"{fish.name}, demand {fish.demand}, sell {fish.demand}: {sell}")
+                print(f"\n{fish.name}, demand {fish.demand}, sell {fish.demand}: {sell}")
                 #the labour weeks used for the fish type is deduced from the time left once the fish is sold
                 time_left -= fish_time
 
             # if the labour is insufficient, no more fish is sold
             else:
                 time_left = 0
-                print(f"{fish.name}, demand {fish.demand}, sell {fish.demand}: 0")
+                print(f"\n{fish.name}, demand {fish.demand}, sell {fish.demand}: 0")
     
 
         # Pay expenses for the quarter
@@ -112,10 +123,10 @@ def main():
             print(f" {s}. {supplier.name}")
         while True:
             try:
-                vendor = int(input(">>> Enter number of vendor to purchase from: ")) - 1
+                vendor = int(input("\n>>> Enter number of vendor to purchase from: ")) - 1
                 if 0 <= vendor < len(hatchery.suppliers):
                     vendor_select = hatchery.suppliers[vendor]
-                    print(f"The supplier selected for restocking is: {vendor_select.name}")
+                    print(f"\nThe supplier selected for restocking is: {vendor_select.name}")
                     print(hatchery.restock(vendor_select.name))
                     break
                 print("Invalid vendor number. Please enter a valid number.")
@@ -143,7 +154,7 @@ def main():
 
     # final state of the hatchery
     print("\n=== FINAL STATE ===")
-    print(f"Cash: {hatchery.cash}")     #the cash left at the end of the simulation
+    print(f"\nFin-Tastic Hatchery, Cash: {hatchery.cash}")     #the cash left at the end of the simulation
     for warehouse in hatchery.warehouse:
         print(f" {warehouse.supply}, {warehouse.main} (capacity={warehouse.main_max_capacity})")
         print(f" {warehouse.supply}, {warehouse.auxiliary} (capacity={warehouse.aux_max_capacity})")

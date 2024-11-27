@@ -24,7 +24,7 @@ Attributes:<br/>
 `demand` - the demand of each fish type<br/>
 
 ### 2. Technician
-The technician class represents the workers that work in the hatchery. Each technician is defined by their name, pay per week, and if they specialize in any fish type. This class is critical for managing all the labour hiring and their availability, cost incured and the specialization of the technician that can reduce the maintenance time for the fish, making the hatchery more productive and profitable.
+The technician class represents the workers that work in the hatchery. Each technician is defined by their name, pay per week, and if they specialize in any fish type. This class is critical for managing all the labour hiring and their availability, cost incured throughout the quarter.
 
 Attributes:<br/>
 `name` - the name of the technician<br/>
@@ -36,8 +36,6 @@ Methods:<br/>
 `__init__()` initialized a technician in the hatchery. Each technician had its own attributes like the weekly pay, number of working weeks and any specialization. 
 
 `pay_perquarter()` is used to calculate the pay of each technician per quarter. The technicians are paid for 12 weeks in each quarter. Therefore, the total amount is calculated accordingly.
-
-`maintain_fish()` is a method that is used in the extension of the project. Each technician specializes in one fish which reduced the maintainance time for that specific fish type to 2/3rd of its original time. Therefore, this method is used to calculate the new maintenance time for the fish type given that the technician specialises in that fish type.
 
 ### 3. Warehouse
 The warehouse class represents the supplies that are stored in the warehouses, namely main and auxiliary warehouse. The supplies that are stored are fertilizer, feed and salt respectively. This class ensures encapsulation of all the supplies and their maximum limit in each warehouse, accounts for the depreciation of the supplies and calculates the warehouse storage costs. All these factors offers a more realistic approach to the management of the hatchery, prompting the user to manage the resources and plan accordingly.
@@ -110,4 +108,27 @@ Methods:<br/>
 
 `bankrupcy()` is a method that declares when the hatchery has gone bankrupt. The bankruptcy status is checked at every step during the simulation. Once the conditions for hatchery bankruptcy are met, the method `bankrupcy()`  is called.
 
-### 5. Main
+## Main.py
+The main function is the entry point for running the simulation. It prompts the user for inputs for various tasks, as the simulation goes. The function performs various tasks related to the hatchery and runs through multiple quarters, simulating these operations and progress of the hatchery as we go.<br/>
+
+The following are the key steps that have been performed in the function:
+
+**1. Initialize the hatchery<br/>**
+The class `Hatchery` is imported in the main file. The function initializes the hatchery by creating an instance of the `Hatchery` class. This will manage all the operations during the simulation.<br/>
+
+**2. Get user input for the number of quarters<br/>**
+The next step is to start the simulation, with the first input being the number of quarters for the simualtion to run for. The input is validated to ensure it is a valid input.<br/>
+
+**3. Loop for quartely operations<br/>**
+For each quarter, the simulation performs the these operations -<br/>
+    - Technician management: inputs are taken from the user for the number of technicians, names for the technicians added and if they have specialty, if yes then in which fish type.<br/>
+    - Selling the fish: once the hatchery is setup by choosing the number of quarters and technicians for a specific quarter, the hatchery sells fish according to the demand and the supply constraints as well as the labour time constraints. Failing to meet any of these constraints, the hatchery doesn't sell that specific type of fish.<br/>
+    - Paying expenses: next, the expenses incured during this quarter are taken care of. The expenses are paid using the hatchery cash balance. If the expenses aren't paid due to low balance, the hatchery is declared bankrupt.<br/>
+    -Apply depreciation: as we reach the end of the quarter, a portion of the supplies that weren't used are depreciated.<br/>
+    - Restocking supplies: the user is prompted to give an input for which vendor to select for restocking the supplies. The warehouse is then restocked for the next quarter.<br/>
+    - Bankruptcy check: if the hatchery fails to pay expenses or restock supplies, it goes bankrupt leading the simulation to stop.<br/>
+    - End of quarter report: at end of each quarter, we get a quarterly report showing all the aspects of the hatchery.<br/>
+    - Final state report: similar to end of quarter, we get a final state report of the hatchery at the end of the simulation.<br/>
+
+**4. Error Handling<br/>**
+The program raises error if the user gives invalid inputs for each of the input values, and asks the user to enter valid input.
