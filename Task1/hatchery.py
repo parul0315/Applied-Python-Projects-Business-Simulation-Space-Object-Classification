@@ -1,3 +1,9 @@
+#Name - Parul Nagar
+#Section - Data Science MSc
+#Description - the `Hatchery` class contains methods that perform various operations for the simulation of the fish hatchery.
+# The classes created are called in Hatchery and used in the methods.
+
+
 from fish import Fish
 from technician import Technician
 from supplier import Supplier
@@ -47,6 +53,13 @@ class Hatchery:
         self.bankrupt = False   #the hatchery is set to be not bankrupt at the start
 
     def prompt_specialty(self):
+        """
+        prompts user to choose specialty of the technician. 
+
+        Parameters: None
+        Return:
+        fish_name - which is the name of the fish type that the technician specializes in.
+        """
         while True:
             try:
                 fish_id = int(input("Enter the fish type the technician specializes in.\
@@ -208,10 +221,13 @@ class Hatchery:
                 total_feed = fish.feed * actual_quantity
                 total_salt = fish.salt * actual_quantity
                 
-                is_specialized = False
+                is_specialized = False  #the specialization of the technician is initialized as False
+
+                # checking for specialization
                 if any (t.specialty == fish.name for t in self.technicians):
                     is_specialized = True
 
+                # the maintenance time for fish is reduced by 1/3rd
                 if is_specialized == True:
                     required_labour = actual_quantity * (fish.time *(2/3))
 
@@ -221,6 +237,7 @@ class Hatchery:
                 print(f"\nTotal labor available: {time_left} weeks")
                 print(f"Labor required: {required_labour} weeks")
                 
+                #checking the supplies availability
                 supplies_checker = self.check_supplies(
                      total_fertilizer_available,
                      total_fertilizer,
@@ -229,6 +246,8 @@ class Hatchery:
                      total_salt_available,
                      total_salt
                 )
+
+                #checking the labour availability
                 labour_checker = self.check_labour(time_left, required_labour)
                 
                 if  supplies_checker and labour_checker:

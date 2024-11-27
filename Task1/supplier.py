@@ -1,3 +1,8 @@
+#Name - Parul Nagar
+#Section - Data Science MSc
+#Description - The program defines the class `Supplier`, which represents the supplier that are available for restocking supplies, 
+#along with the their pricing for the supplies per unit.
+
 class Supplier:
     """
     Supplier class representing the suppliers.

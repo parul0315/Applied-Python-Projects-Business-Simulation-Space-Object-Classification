@@ -1,6 +1,12 @@
+#Name - Parul Nagar
+#Section - Data Science MSc
+#Description - The program defines a class `Fish`. The `Fish` class models a fish type's attributes for the hatchery. 
+
 class Fish:
     """ 
-    initializing the fish class with the required attributes. 
+    initializing the fish class with the required attributes, 
+    which are the name of the fish type, fertilizer required, feed required, 
+    salt required, time takes for maintaning the fish, demand of the fish type and the price of each fish. 
     """
     def __init__(self, name, fertilizer, feed, salt, time, demand, price):
         self.name = name    #name of the fish

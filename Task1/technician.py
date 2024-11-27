@@ -1,3 +1,8 @@
+# Name - Parul Nagar
+#Section - Data Science MSc
+#Description - This program defines the `Technician` class, which represents the workers in the hatchery.
+#The technicians harvest the fish, sell the fish and can have a specialization in one fish type.
+
 class Technician:
     """ 
     Class to define the technician that work in the hatchery

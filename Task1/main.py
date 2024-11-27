@@ -1,3 +1,8 @@
+#Name - Parul Nagar
+#Section - Data Science MSc
+#Description - The program defines the main function, that is the entry point of the hatchery simulation. It allows users to
+#manage the different operations in the hatchery throughout the number of quarters that the function is running for.
+
 from hatchery import Hatchery
 
 def main():

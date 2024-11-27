@@ -86,6 +86,8 @@ Attributes:<br/>
 Methods:<br/>
 `__init__()` initializes the cash balance of the hatchery at £10,000 at the start, the fish types, warehouse and suppliers.<br/>
 
+`prompt_specialty` prompts the user to choose the specialty for the technician to be hired. The method uses the indices of the `fish_types` attribute that has been initialized since the specialty is one of the fish types.
+
 `add_technician()` adds the technician to the list of technicians that are working at the hatchery for a given quarter. It ensures that no two technicians are given the same name, the number of technicians doesn't exceed 5 and returns a message that indicates the hiring of the technician.
 
 `remove_technician()` removes the technician that the user select from the hatchery. It ensures that the hatchery always have atleast one technician working and removes the last hired technician from the list. It returns the message indicating whether the technician was removed or not.
@@ -132,3 +134,6 @@ For each quarter, the simulation performs the these operations -<br/>
 
 **4. Error Handling<br/>**
 The program raises error if the user gives invalid inputs for each of the input values, and asks the user to enter valid input.
+
+## Conclusion
+The Fish Hatchery Management Simulation is a comprehensive and interactive project that combines multiple aspects of running a fish hatchery, such as hiring staff, resources allocation, and financial management. The code successfully encapsulates different aspects of the business in seperate files, making it clearer and enhancing the code reusability.

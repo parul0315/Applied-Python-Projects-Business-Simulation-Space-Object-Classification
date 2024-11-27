@@ -1,3 +1,8 @@
+#Name - Parul Nagar
+#Section - Data Science MSc
+#Description - The program defines the `Warehouse` class. It tracks storage levels, applies quarterly depreciation and calculates
+#the storage costs for the supplies being stored.
+
 import math
 class Warehouse:
     """
