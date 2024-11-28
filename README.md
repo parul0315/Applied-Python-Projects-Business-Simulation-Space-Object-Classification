@@ -141,3 +141,32 @@ The Fish Hatchery Management Simulation is a comprehensive and interactive proje
 ---
 
 ## 2. Tracking Near-Earth Objects (NEOs) - 
+
+###Libraries Used:
+
+1. **requests** - is used to make HTTP requests to fetch data from APIs.<br/>
+install: `pip install requests`
+
+2. **json**: is used for handling JSON data.  
+install: `pip install json`
+
+3. **pandas**: is used for working with dataframes.  
+install: `pip install pandas`
+
+4. **numpy**: is used for numerical operations and array handling.  
+install: `pip install numpy`
+
+5. **scipy**: is used for statistical operations.  
+install: `pip install scipy`
+
+6. **matplotlib**: is used for creating visualizations such as plots and graphs.  
+install: `pip install matplotlib`
+
+7.  **seaborn**: built on `matplotlib`, this library is used for advanced data visualizations.  
+install: `pip install seaborn`
+
+8. **scikit-learn**: is used for machine learning, including model building, training, and evaluation.  
+install: `pip install scikit-learn`
+
+9. **statistics**: is used for basic statistical functions.  
+install: `pip install statistics`
