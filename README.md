@@ -1,14 +1,14 @@
 # uv24946_EMATM0048
 
-# Fish Hatchery Management Simulation
+# 1. Fish Hatchery Management Simulation
 
-## Description
+## 1.1 Description
 The Fish Hatchery Management Simulation is a python based project that aims at creating a simulation for managing a fish hatchery. It involves various aspects that an owner of the hatchery has to look after while running the business such as the resources, fish types, labour, storage and financial management. It interacts with the user, asking for the input and running the management simulation accordingly.
 The project consists of several classes that are interconnected, each representing a different aspect of the hatchery. Below are the classes created and the function that each of the class performs:
 
-## Classes and their functions
+## 1.2 Classes and their functions
 
-### 1. Fish Class
+### 1.2.1 Fish Class
 The fish class represents the core product of the hatchery i.e., the fish specied being harvestd and sold. Each fish type is defined by its attributes which are the supplies required by each type and maintenance time. The class also keeps track of the financial properties of the fish which are its price and demand. All these attributes are encapsulated in the fish class, providing a foundation which ensures that each fish's characteristics are applied consistently throughout the simulation.
 
 Methods:<br/>
@@ -23,7 +23,7 @@ Attributes:<br/>
 `price` - the price of each fish type<br/>
 `demand` - the demand of each fish type<br/>
 
-### 2. Technician
+### 1.2.2 Technician
 The technician class represents the workers that work in the hatchery. Each technician is defined by their name, pay per week, and if they specialize in any fish type. This class is critical for managing all the labour hiring and their availability, cost incured throughout the quarter.
 
 Attributes:<br/>
@@ -37,7 +37,7 @@ Methods:<br/>
 
 `pay_perquarter()` is used to calculate the pay of each technician per quarter. The technicians are paid for 12 weeks in each quarter. Therefore, the total amount is calculated accordingly.
 
-### 3. Warehouse
+### 1.2.3 Warehouse
 The warehouse class represents the supplies that are stored in the warehouses, namely main and auxiliary warehouse. The supplies that are stored are fertilizer, feed and salt respectively. This class ensures encapsulation of all the supplies and their maximum limit in each warehouse, accounts for the depreciation of the supplies and calculates the warehouse storage costs. All these factors offers a more realistic approach to the management of the hatchery, prompting the user to manage the resources and plan accordingly.
 
 Attributes:<br/>
@@ -54,7 +54,7 @@ Methods:<br/>
 
 `warehouse_cost()` calculates the cost incured through the storage space taken up by the supplies in the warehouses. This method calculates the total cost for each supply from both the main and the auxiliary warehouses. 
 
-### 4. Supplier
+### 1.2.4 Supplier
 The supplier class represents the supplier from which the hatchery restocks its supplies. Each supplier has different rates for each of the supplies, and the user is prompted to make the decision based on the cost efficiency for the hatchery. This class serves as a place to store all the pricing information of the supplies.
 
 Methods:<br/>
@@ -66,7 +66,7 @@ Attributes:<br/>
 `feed_rate` - the rate for the feed by the supplier<br/>
 `salt_rate` - the rate for the salt by the supplier<br/>
 
-### 4. Hatchery
+### 1.2.5 Hatchery
 The hatchery class works as the central hub of the simulation, encapsulating all the methods that are required for the hatchery management. It brings together all the other classes and uses their components to manage various tasks of the hatchery. It oversees the hiring of the technician, selling fish, using and restocking supplies, applying depreciation, paying expenses and checking for banrupcy at each step of the simulation. To understand how the hatchery is created the following flowchart is designed for a better understanding.<br/>
 The flow of the simulation can be described through the following flowchart:<br/>
 
@@ -110,18 +110,18 @@ Methods:<br/>
 
 `bankrupcy()` is a method that declares when the hatchery has gone bankrupt. The bankruptcy status is checked at every step during the simulation. Once the conditions for hatchery bankruptcy are met, the method `bankrupcy()`  is called.
 
-## Main.py
+## 1.3 Main.py
 The main function is the entry point for running the simulation. It prompts the user for inputs for various tasks, as the simulation goes. The function performs various tasks related to the hatchery and runs through multiple quarters, simulating these operations and progress of the hatchery as we go.<br/>
 
 The following are the key steps that have been performed in the function:
 
-**1. Initialize the hatchery<br/>**
+**1.3.1 Initialize the hatchery<br/>**
 The class `Hatchery` is imported in the main file. The function initializes the hatchery by creating an instance of the `Hatchery` class. This will manage all the operations during the simulation.<br/>
 
-**2. Get user input for the number of quarters<br/>**
+**1.3.2 Get user input for the number of quarters<br/>**
 The next step is to start the simulation, with the first input being the number of quarters for the simualtion to run for. The input is validated to ensure it is a valid input.<br/>
 
-**3. Loop for quartely operations<br/>**
+**1.3.3 Loop for quartely operations<br/>**
 For each quarter, the simulation performs the these operations -<br/>
     - Technician management: inputs are taken from the user for the number of technicians, names for the technicians added and if they have specialty, if yes then in which fish type.<br/>
     - Selling the fish: once the hatchery is setup by choosing the number of quarters and technicians for a specific quarter, the hatchery sells fish according to the demand and the supply constraints as well as the labour time constraints. Failing to meet any of these constraints, the hatchery doesn't sell that specific type of fish.<br/>
@@ -132,8 +132,12 @@ For each quarter, the simulation performs the these operations -<br/>
     - End of quarter report: at end of each quarter, we get a quarterly report showing all the aspects of the hatchery.<br/>
     - Final state report: similar to end of quarter, we get a final state report of the hatchery at the end of the simulation.<br/>
 
-**4. Error Handling<br/>**
+**1.3.4 Error Handling<br/>**
 The program raises error if the user gives invalid inputs for each of the input values, and asks the user to enter valid input.
 
-## Conclusion
+## 1.4 Conclusion
 The Fish Hatchery Management Simulation is a comprehensive and interactive project that combines multiple aspects of running a fish hatchery, such as hiring staff, resources allocation, and financial management. The code successfully encapsulates different aspects of the business in seperate files, making it clearer and enhancing the code reusability.
+
+---
+
+## 2. Tracking Near-Earth Objects (NEOs) - 
