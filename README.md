@@ -1,6 +1,3 @@
-# uv24946_EMATM0048
-link for the github: https://github.com/parul0315/uv24946_EMATM0048
-
 # 1. Fish Hatchery Management Simulation
 
 ## 1.1 Description
